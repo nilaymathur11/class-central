@@ -21,22 +21,22 @@ export default function CourseDetail() {
         checkEnrolled();
     }, [id])
 
-    let checkEnrolled = ()=>{
-        const isExist = CoursesAdded.filter((v)=>v?.id === Number(id))
-        if(isExist.length){
+    let checkEnrolled = () => {
+        const isExist = CoursesAdded.filter((v) => v?.id === Number(id))
+        if (isExist.length) {
             setAlreadyEnrolled(true)
-        }else{
+        } else {
             setAlreadyEnrolled(false)
         }
     }
 
-    let checkCourse = ()=>{
-        const isExist = CoursesAdded.filter((v)=>v?.id === Number(id))
-        if(!isExist.length){
+    let checkCourse = () => {
+        const isExist = CoursesAdded.filter((v) => v?.id === Number(id))
+        if (!isExist.length) {
             dispatch(addCourse(courseData))
             toast.success('Enrolled!')
             setAlreadyEnrolled(true)
-        }else{
+        } else {
             toast.error('Already Enrolled To The Course!')
             setAlreadyEnrolled(false)
         }
@@ -45,7 +45,7 @@ export default function CourseDetail() {
         <div className='md:max-w-[1150px] mx-auto px-[20px] pt-[12px] box-border'>
             <ToastContainer />
             <div>
-                <img src="https://ccweb.imgix.net/https%3A%2F%2Fwww.classcentral.com%2Freport%2Fwp-content%2Fuploads%2F2023%2F12%2Fbcg_guitar_banner.png?auto=format&ixlib=php-4.1.0&w=300&s=2da5b394851f7d45d07a11188c5b13df" alt="course image" className='md:h-[600px] h-[200px] object-cover cursor-pointer rounded-md w-[100%]' />
+                <img src={courseData?.thumbnail} alt="course image" className='md:h-[600px] h-[200px] object-cover cursor-pointer rounded-md w-[100%]' />
             </div>
             <div className='mt-[6px]'>
                 <span className='text-[#0a2540] me-[12px]'>{courseData?.instructor}</span>
@@ -54,9 +54,14 @@ export default function CourseDetail() {
             <div className='font-bold mt-[6px] md:text-[35px] text-[20px] text-[#0a2540]'>
                 {courseData?.name}
             </div>
-            <div className='font-bold md:mt-[50px] mt-[25px] md:text-[25px] text-[18px] bg-[#0a2540] rounded-md w-[300px] py-[12px] text-center text-[#009fff] shadow-md mb-[25px] cursor-pointer' onClick={checkCourse}>
-                {alreadyEnrolled?'Enrolled':'Enroll Now'}
-            </div>
+            {
+                courseData?.enrollmentStatus === 'Open' ?
+                    <div className='font-bold md:mt-[50px] mt-[25px] md:text-[25px] text-[18px] bg-[#0a2540] rounded-md w-[300px] py-[12px] text-center text-[#009fff] shadow-md mb-[25px] cursor-pointer' onClick={checkCourse}>
+                        {alreadyEnrolled ? 'Enrolled' : 'Enroll Now'}
+                    </div>
+                    :
+                    null
+            }
             <div className='font-bold md:mt-[50px] mt-[25px] md:text-[30px] text-[18px] text-[#0a2540]'>
                 About Course :
             </div>
@@ -107,13 +112,13 @@ export default function CourseDetail() {
                         null
                 }
             </div>
-            <div className='font-bold md:mt-[50px] mt-[25px] md:text-[25px] text-[18px] bg-[#0a2540] rounded-md w-[300px] py-[12px] text-center text-[#009fff] shadow-md mb-[25px] cursor-pointer' onClick={()=>setSyllabus(!syllabus)}>
+            <div className='font-bold md:mt-[50px] mt-[25px] md:text-[25px] text-[18px] bg-[#0a2540] rounded-md w-[300px] py-[12px] text-center text-[#009fff] shadow-md mb-[25px] cursor-pointer' onClick={() => setSyllabus(!syllabus)}>
                 View Syllabus
             </div>
             <div className='mt-[6px] ms-[12px] md:text-[20px] text-[18px] text-[#0a2540]'>
                 {
-                    syllabus&&courseData?.syllabus?.length ?
-                        courseData?.syllabus.map((v,i) => {
+                    syllabus && courseData?.syllabus?.length ?
+                        courseData?.syllabus.map((v, i) => {
                             return (
                                 <div className='mb-[25px] ms-[12px]' key={i}>
                                     <div className='font-bold'>Week : {v?.week}</div>
